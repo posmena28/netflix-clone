@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Home from './pages/Home/Home'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import Login from './pages/Login/Login'
 import Player from './pages/Player/Player'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -10,18 +10,28 @@ import { ToastContainer } from 'react-toastify';
 const App = () => {
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const locationRef = useRef(location);
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
+    locationRef.current = location;
+  }, [location])
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log("Logged In");
-        navigate('/')
+        if (locationRef.current.pathname === '/login') {
+          navigate('/');
+        }
       } else {
         console.log("Logged Out");
         navigate('/login')
       }
-    })
-  },[navigate])
+    });
+
+    return () => unsubscribe();
+  },[])
 
   return (
     <div>
