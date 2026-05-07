@@ -40,7 +40,12 @@ const signup = async (name, email, password) => {
         })
     } catch (error) {
         console.log(error);
-        toast.error(error.code.split('/')[1].split('-').join(' '));
+        
+        const message = error?.code
+            ? error.code.split('/')[1].split('-').join(' ')
+            : "Something went wrong";
+
+        toast.error(message);
     }
 }
 

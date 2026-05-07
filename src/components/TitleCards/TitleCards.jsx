@@ -8,14 +8,6 @@ const TitleCards = ({title, category}) => {
   const [apiData, setApiData] = useState([]);
   const cardsRef = useRef();
 
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZjRlYmE1NDg0M2ZjZjYwY2UyYzliNjIzNmQ5OTQ3MCIsIm5iZiI6MTc2ODQyODAxOS45Njk5OTk4LCJzdWIiOiI2OTY4MTFmMzRmMWJiYzBiZjUyNTgyM2MiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ymF7td46qTUyBr2yuBCJgZi30BhdyoHlMRSdg9zIfAE'
-    }
-  };
-
   const handleWheel = (event) => {
     event.preventDefault();
     cardsRef.current.scrollLeft += event.deltaY;
@@ -23,13 +15,21 @@ const TitleCards = ({title, category}) => {
 
   useEffect(() => {
 
+    const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZjRlYmE1NDg0M2ZjZjYwY2UyYzliNjIzNmQ5OTQ3MCIsIm5iZiI6MTc2ODQyODAxOS45Njk5OTk4LCJzdWIiOiI2OTY4MTFmMzRmMWJiYzBiZjUyNTgyM2MiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ymF7td46qTUyBr2yuBCJgZi30BhdyoHlMRSdg9zIfAE'
+      }
+    };
+
     fetch(`https://api.themoviedb.org/3/movie/${category ? category : "now_playing"}?language=en-US&page=1`, options)
     .then(res => res.json())
     .then(res => setApiData(res.results))
     .catch(err => console.error(err));
 
     cardsRef.current.addEventListener('wheel', handleWheel)
-  }, [category, options])
+  }, [category])
 
   return (
     <div className='title-cards'>
