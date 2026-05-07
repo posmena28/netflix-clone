@@ -31,7 +31,7 @@ const App = () => {
     });
 
     return () => unsubscribe();
-  },[])
+  },[navigate])
 
   return (
     <div>
